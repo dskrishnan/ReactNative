@@ -31,6 +31,7 @@ console.log("JavaScript Deep Dive");
  * 
  * There are lots of lexical environments. Which one is currently running is managed via execution contexts.
  * It can contain things beyond what you've written in the code.
+ * 
  */
 
  /**
@@ -47,13 +48,13 @@ console.log("JavaScript Deep Dive");
    */
 
 /**
- * Global Execution Context: When a JS file is executed, it creates a Global Object(window in Browsers) and a variable 'this'
- * in the lexical environment(Execution Context). This object & variable is available to all code inside the lexical environment.
+ * Global Execution Context: When a JS file is executed, it creates a Global Object(variable) 'window' in Browsers and 'this'
+ * in the lexical environment(Execution Context). This object(variable) is available to all code inside the lexical environment.
  * Variables and Functions created globally are attached to the global object "this"(or "window" in Browsers).
  * Ex. var a = "Hello World" is equal to this.a and also equal to window.a in browsers.
  * i.e. this.a = window.a, both are equal to "Hello World"
  * 
- * Global in JS Means, "Not inside a Function".
+ * Global in JavaScript Means, "Not inside a Function".
  */
 
  /**
@@ -71,12 +72,33 @@ console.log("JavaScript Deep Dive");
    * Execution Mechanism: JavaScript Engine first creates a Global execution context. In that variables are set to undefined and functions are
    * kept in memory in its entirety.
    *
-   * Then Function invocation may happen if a function is globally set to invoke. In JavaScript Invocation or calling or running a function happens
+   * Then Function invocation may happen if a function is globally set to invoke/call. In JavaScript Invocation or calling or running a function happens
    * using paranthesis ().
    * 
-   * Once a function is invoked, then function is invocation context is stacked on top the global execution context. Only after the completion of 
+   * Once a function is invoked, then functions invocation context is stacked on top the global execution context. Only after the completion of 
    * Function execution context, global execution context resumes.
    */
+
+   /**
+    * Scope Chain: At first Global execution context is created. Then from here, individual Function's execution context is stacked on top.
+    * Each execution context has a creation phase, execution phase and Outer environment/lexical reference
+    * 
+    * Creation Phase: It sets up memory for variables and functions. For Variables, it only allocates memory but the variables are
+    * assigned as variable undefined by default. Only in the execution phase, corresponding values are assigned to the variable.
+    * In Creation Phase entire function is put into memory.
+    * 
+    * Execution Phase: In this code is executed.
+    * 
+    * Outer Lexical/environment reference: It is reference to the physical/lexical place where a variable/function is written.
+    * 
+    * Scope Chain works like this,
+    *   Global Execution Context --> Function A's Execution Context --> Function B's Execution Context & so on..
+    * Depending on where each function is written its execution context and its outer references are determined. For example
+    * if a variable is declared inside Function A, then it won't be accesible in the Global execution context.
+    * But if a variable is declared Global execution context and the same variable is not declared or modified inside the function's execution context,
+    * that global variable can be accessed inside the function's execution context. Typically variables & functions inside the function are not exposed outside.
+    * 
+    */
 
 const firstName = "Santhanakrishnan"; // Double Quotes works
 const lastName = 'Dhandapani'; // Single Quotes works equally as well
@@ -90,12 +112,13 @@ const arr = [
                     console.log('Hello from Array')
                 }, // This extra Comma at the end doesn't affect JS. But a missing comma in between will give error.
             ];
-arr[3](); // This will refer the 3rd member which is a function in this case.
+/*arr[3](); // This will refer the 3rd member(Starting from '0') which is a function in this case.
 
+//Following loop will print the array elements
 for (let i = 0; i< arr.length; i++){
     console.log(arr[i])
 }
-
+*/
 /**
  Data Types
  *      Dynamic Typing - Variable accepts Strings or numbers. Not a problem.
@@ -115,9 +138,13 @@ for (let i = 0; i< arr.length; i++){
  const implicit = x + ""; //implicit === "100"
 
  /**
-  * == vs ===
-  *     ==  Coerces the types
-  *     === Requires equivalent types
+  * Difference between '==' vs '==='
+  *     ==  Coerces the types and then compare
+  *     === It doesn't coerce and compare them absolutely.
+  * 
+  * In JavaScript, a truthy value is a value that is considered true when encountered 
+  * in a Boolean context. All values are truthy unless they are defined as falsy 
+  * (i.e., except for false, 0, -0, 0n, "", null, undefined, and NaN).
   * 
   * Which values are falsy?
   *     undefined
